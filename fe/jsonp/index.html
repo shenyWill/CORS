@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jsonp 实现跨域</title>
+    
+</head>
+
+<body>
+    <h3>jsonp 实现跨域</h3>
+</body>
+
+</html>
+
+<script>
+    // 创建 Jsonp 类
+    // 初始化时传入两个参数, url 是接口的url
+    // cb 是对于接口返回的参数的处理
+    function Jsonp(url, cb) {
+        this.callbackName = 'jsonp_' + Date.now()
+        this.cb = cb
+        this.url = url
+        this.init()
+    }
+
+    // 初始化方法 用于拼接 url
+    Jsonp.prototype.init = function () {
+        if (~this.url.indexOf('?')) {
+            this.url = this.url + '&callback=' + this.callbackName
+        } else {
+            this.url = this.url + '?callback=' + this.callbackName
+        }
+        this.createCallback()
+        this.createScript()
+    }
+
+    // 创建 script 标签, src 取接口请求的url
+    Jsonp.prototype.createScript = function () {
+        var script = document.createElement('script')
+        script.src = this.url
+        script.onload = function () {
+            this.remove()
+        }
+        document.body.appendChild(script)
+    }
+
+    // 绑定回调函数
+    Jsonp.prototype.createCallback = function () {
+        window[this.callbackName] = this.cb
+    }
+
+    // 创建 jsonp 实例, 并指定回调函数
+    new Jsonp('http://localhost:8888/', function (data) {
+        console.log(data)
+    })
+</script>
