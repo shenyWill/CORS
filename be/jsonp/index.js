@@ -10,7 +10,7 @@ const server = http.createServer((request, response) => {
   const queryObj = url.parse(request.url, true).query;
   console.log(queryObj)
   // 这里把前端传来的 callback 字段作为后端返回的回调函数的函数名称
-  response.end(`${queryObj.callback}({name: 'quanquan', friend: 'guiling'})`);
+  response.end(`${queryObj.callback}({name: 'yuanwill', friend: 'shenzhen'})`);
 });
 
 // 启动服务, 监听端口
